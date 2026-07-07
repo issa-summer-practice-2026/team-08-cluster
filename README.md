@@ -1,8 +1,6 @@
 Miruna Vasile si Alexandru Strachinar
 [![CI Pipeline](https://github.com/miruna-elenavasile/team-04-cluster/actions/workflows/ci.yml/badge.svg)](https://github.com/miruna-elenavasile/team-08-cluster/actions/workflows/ci.yml)
 
-Echipa 08
-
 A digital automotive **instrument cluster** — the starter app for the ISSA
 Summer Practice DevOps week. It ships **fully working and green**. Your job for
 the week is to build the **DevOps around it** (CI, PR/review flow, containers,
