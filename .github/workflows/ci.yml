@@ -1,73 +1,69 @@
 name: CI Pipeline
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+on: [push, pull_request]
 
 jobs:
-  # --- TRACK-UL PENTRU BACKEND ---
   backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout cod
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          python scripts/dev.py setup || pip install -r requirements.txt || pip install ruff pytest pytest-cov
+          cd backend
+          python -m venv ../.venv
+          ../.venv/bin/pip install -r dev-requirements.txt
 
-      - name: Ruff Check
-        run: ruff check .
+      - name: Compile syntax
+        run: |
+          cd backend
+          ../.venv/bin/python -m compileall .
 
-      - name: Pytest
-        run: pytest --cov=./ --cov-report=xml
+      - name: Lint (Ruff)
+        run: |
+          cd backend
+          ../.venv/bin/ruff check .
 
-      - name: Upload coverage
+      - name: Test & Coverage
+        run: |
+          cd backend
+          ../.venv/bin/pytest --cov=app
+
+      - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
-          name: backend-coverage
-          path: coverage.xml
+          name: coverage-report
+          path: backend/.coverage
 
-      - name: Python compileall
-        run: python -m compileall .
-
-      - name: Boot the app and curl health
+      - name: Smoke Test (Boot & cURL)
         run: |
-          python scripts/dev.py run &
-          sleep 3
-          curl --fail http://localhost:5000/health || curl --fail http://localhost:8000/health
+          cd backend
+          ../.venv/bin/python -m app &
+          sleep 5
+          curl --fail http://127.0.0.1:8000/health
 
-  # --- TRACK-UL PENTRU FRONTEND ---
   frontend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout cod
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: '24'
 
-      - name: Install Frontend Deps
-        run: npm ci
-
-      - name: Lint Frontend
-        run: npm run lint
-
-      - name: Typecheck Frontend
-        run: npm run typecheck
-
-      - name: Run Frontend Tests
-        run: npm run test
-
-      - name: Build Frontend
-        run: npm run build
+      - name: Install & Verificari
+        run: |
+          cd frontend
+          npm ci
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
