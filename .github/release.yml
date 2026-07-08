@@ -1,0 +1,14 @@
+changelog:
+  categories:
+    - title: 🚀 Features Noi
+      labels:
+        - enhancement
+        - feature
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+        - fix
+    - title: 📝 Documentație & Altele
+      labels:
+        - documentation
+        - chore
