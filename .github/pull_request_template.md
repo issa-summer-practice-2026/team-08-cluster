@@ -1,22 +1,7 @@
-\## Descriere Schimbări
+## Descriere
+Ce modificări aduce acest PR?
 
-<!-- Descrieți pe scurt ce modificări ați adus în acest PR -->
-
-
-
-\## Tipul Schimbării
-
-\- \[ ] Bug fix (reparare eroare)
-
-\- \[ ] Feature nou (funcționalitate nouă)
-
-\- \[ ] Documentație / Configurare
-
-
-
-\## Verificări
-
-\- \[ ] Testele locale rulează cu succes
-
-\- \[ ] Pipeline-ul de CI este verde
-
+## Checklist
+- [ ] Testele rulează local și sunt verzi
+- [ ] Am rezolvat toate conflictele
+- [ ] Codul a fost verificat de linter
