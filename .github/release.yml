@@ -1,7 +1,9 @@
 changelog:
+  title: "What's Changed"
   exclude:
     labels:
       - ignore-changelog
+      - internal
     authors:
       - dependabot
   categories:
@@ -14,8 +16,13 @@ changelog:
       labels:
         - bug
         - fix
-    - title: "🧰 Maintenance & Refactoring"
+    - title: "⚡ Performance"
+      labels:
+        - performance
+    - title: "📖 Documentation"
+      labels:
+        - documentation
+    - title: "🧰 Maintenance"
       labels:
         - chore
-        - documentation
         - refactor
