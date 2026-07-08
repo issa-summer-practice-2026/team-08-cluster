@@ -33,7 +33,7 @@ jobs:
       - name: Test & Coverage
         run: |
           cd backend
-          ../.venv/bin/pytest --cov=app
+          ../.venv/bin/pytest --cov=app --cov-fail-under=75
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
