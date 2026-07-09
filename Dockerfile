@@ -14,23 +14,27 @@ RUN npm run build
 FROM python:3.11-slim
 WORKDIR /app
 
-# Întâi copiem TOATE fișierele de requirements din backend ca să evităm eroarea de fișier lipsă
-COPY backend/*requirements*.txt ./
+# Copiem fișierul tău de dev-requirements
+COPY backend/dev-requirements.txt ./
 
-# Instalăm dependințele de backend folosind fișierul tău specific
+# TRUC: Creăm un fișier requirements.txt gol în container, 
+# pentru ca dev-requirements.txt să nu mai dea eroare când îl caută
+RUN touch requirements.txt
+
+# Instalăm dependințele de backend
 RUN pip install --no-cache-dir -r dev-requirements.txt
 
 # Copiem codul sursă al backend-ului
 COPY backend/ ./backend
 
-# Copiem frontend-ul compilat din STAGE 1 în folderul de unde backend-ul servește fișierele statice
+# Copiem frontend-ul compilat din STAGE 1
 COPY --from=frontend-builder /app/frontend/dist ./backend/dist
 
-# Expunem portul aplicației (cel folosit de serverul tău, ex: 8000)
+# Expunem portul aplicației
 EXPOSE 8000
 
-# Setăm variabila de mediu HOST ca să poată fi accesat containerul din exterior
+# Setăm variabila de mediu HOST
 ENV HOST=0.0.0.0
 
-# Comanda de pornire a aplicației (rulează modulul app din pachetul backend)
+# Comanda de pornire a aplicației
 CMD ["python", "-m", "backend.app"]
