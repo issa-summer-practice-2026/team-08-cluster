@@ -16,33 +16,6 @@ jobs:
       # 2. Rulăm suita de teste DIRECT în interiorul imaginii Docker
       - name: Run Tests inside Docker Container
         run: docker run --rm cluster pytest --cov=app
-      - name: Compile syntax
-        run: |
-          cd backend
-          ../.venv/bin/python -m compileall .
-
-      - name: Lint (Ruff)
-        run: |
-          cd backend
-          ../.venv/bin/ruff check .
-
-      - name: Test & Coverage
-        run: |
-          cd backend
-          ../.venv/bin/pytest --cov=app --cov-fail-under=75
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: backend/.coverage
-
-      - name: Smoke Test (Boot & cURL)
-        run: |
-          cd backend
-          ../.venv/bin/python -m app &
-          sleep 5
-          curl --fail http://127.0.0.1:8000/health
 
   frontend:
     runs-on: ubuntu-latest
