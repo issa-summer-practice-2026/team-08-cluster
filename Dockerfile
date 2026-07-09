@@ -16,6 +16,7 @@ WORKDIR /app
 
 # Instalăm dependințele pentru backend
 COPY backend/requirements.txt ./backend/
+COPY backend/dev-requirements.txt ./backend/
 RUN pip install --no-cache-dir -r backend/requirements.txt -r
 backend/dev-requirements.txt
 
