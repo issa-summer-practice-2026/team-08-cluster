@@ -9,44 +9,13 @@ jobs:
       - name: Checkout cod
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
+      # 1. Construim imaginea folosind Dockerfile-ul pe care l-am reparat împreună
+      - name: Build Docker Image
+        run: docker build -t cluster .
 
-      - name: Install dependencies
-        run: |
-          cd backend
-          python -m venv ../.venv
-          ../.venv/bin/pip install -r dev-requirements.txt
-
-      - name: Compile syntax
-        run: |
-          cd backend
-          ../.venv/bin/python -m compileall .
-
-      - name: Lint (Ruff)
-        run: |
-          cd backend
-          ../.venv/bin/ruff check .
-
-      - name: Test & Coverage
-        run: |
-          cd backend
-          ../.venv/bin/pytest --cov=app
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: backend/.coverage
-
-      - name: Smoke Test (Boot & cURL)
-        run: |
-          cd backend
-          ../.venv/bin/python -m app &
-          sleep 5
-          curl --fail http://127.0.0.1:8000/health
+      # 2. Rulăm suita de teste (cele 96 de teste) DIRECT în interiorul imaginii Docker
+      - name: Run Tests inside Docker Container
+        run: docker run --rm cluster pytest --cov=app
 
   frontend:
     runs-on: ubuntu-latest
@@ -67,4 +36,3 @@ jobs:
           npm run typecheck
           npm run test
           npm run build
-
